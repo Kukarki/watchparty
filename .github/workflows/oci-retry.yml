@@ -1,4 +1,4 @@
-﻿name: OCI Capacity Retry
+name: OCI Capacity Retry
 
 on:
   schedule:
@@ -21,14 +21,7 @@ jobs:
           mkdir -p ~/.oci
           printf '%s' "${{ secrets.OCI_PRIVATE_KEY }}" > ~/.oci/key.pem
           chmod 600 ~/.oci/key.pem
-          cat > ~/.oci/config << EOF2
-[DEFAULT]
-user=ocid1.user.oc1..aaaaaaaai4axam7g2gvro73xtkys3oinlnw3ililu2wziyygfk7mtn4bpk4a
-fingerprint=c0:4b:b7:92:35:b7:e0:03:e4:51:05:1a:6e:77:de:78
-tenancy=ocid1.tenancy.oc1..aaaaaaaaomt6booam4jvzh3qpjp6irbo6xdckrqldx6abxg2s3leyjwxjwlq
-region=us-ashburn-1
-key_file=/home/runner/.oci/key.pem
-EOF2
+          printf '[DEFAULT]\nuser=ocid1.user.oc1..aaaaaaaai4axam7g2gvro73xtkys3oinlnw3ililu2wziyygfk7mtn4bpk4a\nfingerprint=c0:4b:b7:92:35:b7:e0:03:e4:51:05:1a:6e:77:de:78\ntenancy=ocid1.tenancy.oc1..aaaaaaaaomt6booam4jvzh3qpjp6irbo6xdckrqldx6abxg2s3leyjwxjwlq\nregion=us-ashburn-1\nkey_file=/home/runner/.oci/key.pem\n' > ~/.oci/config
           chmod 600 ~/.oci/config
 
       - name: Retry loop across availability domains

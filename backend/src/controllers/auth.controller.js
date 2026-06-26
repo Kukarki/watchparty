@@ -109,7 +109,7 @@ export async function register(req, res, next) {
     const { displayName, email, password } = req.body;
     if (!displayName?.trim())              return res.status(400).json({ error: 'Name is required' });
     if (!email?.trim())                    return res.status(400).json({ error: 'Email is required' });
-    if (!password || password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    if (!password || password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
 
     const sb   = getSupabaseAdmin();
     const name = displayName.trim().slice(0, 30);

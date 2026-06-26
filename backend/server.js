@@ -24,7 +24,24 @@ async function bootstrap() {
   // 2. Express
   const app = express();
   app.set('trust proxy', 1);
-  app.use(helmet({ contentSecurityPolicy: false }));
+  // SECURITY (M2): enable CSP. 'unsafe-inline' is kept for styles because the
+  // SPA injects some inline styles; tighten further once the frontend is audited.
+  // mediaSrc/connectSrc are permissive to allow HLS/CDN playback + websockets.
+  app.use(helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        defaultSrc:  ["'self'"],
+        scriptSrc:   ["'self'"],
+        styleSrc:    ["'self'", "'unsafe-inline'"],
+        imgSrc:      ["'self'", 'data:', 'https:'],
+        mediaSrc:    ["'self'", 'https:', 'blob:'],
+        connectSrc:  ["'self'", 'https:', 'wss:'],
+        frameSrc:    ["'self'", 'https://www.youtube.com', 'https://www.youtube-nocookie.com'],
+      },
+    },
+    crossOriginEmbedderPolicy: false,   // needed for cross-origin media/YouTube embeds
+  }));
   app.use(cors({ origin: config.cors.origins, credentials: true }));
   app.use(express.json({ limit: '2mb' }));
   app.use(express.urlencoded({ extended: true }));

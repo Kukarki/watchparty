@@ -4,14 +4,14 @@ services:
     build: ./backend
     restart: unless-stopped
     environment:
-      NODE_ENV:             production
-      PORT:                 4000
-      JWT_SECRET:           ${JWT_SECRET}
-      JWT_EXPIRES_IN:       ${JWT_EXPIRES_IN:-7d}
-      SUPABASE_URL:         ${SUPABASE_URL}
-      SUPABASE_ANON_KEY:    ${SUPABASE_ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
-      ALLOWED_ORIGINS:      ${ALLOWED_ORIGINS}
+      NODE_ENV: production
+      PORT: 4000
+      JWT_SECRET: 2060900f9be5a81da210b9c54ac471b488323ae6a4cea4822174c0770e673e2c2c32a434bb62775b72c5eebfbc1d8294f55531969733651261a039b583b0d732
+      JWT_EXPIRES_IN: 7d
+      SUPABASE_URL: https://kujeurfxcztsgkbpnysk.supabase.co
+      SUPABASE_ANON_KEY: sb_publishable_sZSQwpLliHTYpYrtHvZAwQ_fc7H_bwv
+      SUPABASE_SERVICE_KEY: (PASTE YOUR REAL SERVICE KEY HERE)
+      ALLOWED_ORIGINS: http://129.213.32.232
     expose:
       - "4000"
     healthcheck:

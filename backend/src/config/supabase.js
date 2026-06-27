@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import { config } from './index.js';
 import { logger } from '../utils/logger.js';
 
@@ -8,19 +9,20 @@ let supabaseAdminClient = null;
 export function getSupabase() {
   if (!config.supabase.url || !config.supabase.anonKey) return null;
   if (!supabaseClient) {
-    supabaseClient = createClient(config.supabase.url, config.supabase.anonKey);
+    supabaseClient = createClient(config.supabase.url, config.supabase.anonKey, {
+      realtime: { transport: ws },
+    });
   }
   return supabaseClient;
 }
 
-// Admin client — bypasses RLS, used for server-side operations
 export function getSupabaseAdmin() {
   if (!config.supabase.url || !config.supabase.serviceKey) return null;
   if (!supabaseAdminClient) {
     supabaseAdminClient = createClient(
       config.supabase.url,
       config.supabase.serviceKey,
-      { auth: { autoRefreshToken: false, persistSession: false } }
+      { auth: { autoRefreshToken: false, persistSession: false }, realtime: { transport: ws } }
     );
   }
   return supabaseAdminClient;

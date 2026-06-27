@@ -29,13 +29,3 @@ services:
       - "80"
     depends_on:
       - backend
-    networks:
-      - default
-      - coolify
-    labels:
-      - coolify.managed=true
-      - coolify.service=frontend
-
-networks:
-  coolify:
-    external: true

@@ -12,6 +12,7 @@ import AuthCallbackPage    from '@/pages/AuthCallbackPage.jsx';
 import RoomPage            from '@/pages/RoomPage.jsx';
 import LobbyPage           from '@/pages/LobbyPage.jsx';
 import PlatformPage        from '@/pages/PlatformPage.jsx';
+import HowToPage           from '@/pages/HowToPage.jsx';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/login"              element={<LoginPage />} />
           <Route path="/auth/callback"      element={<AuthCallbackPage />} />
           <Route path="/platform/:platformId" element={<PlatformPage />} />
+          <Route path="/how-to"             element={<HowToPage />} />
 
           {/* Protected */}
           <Route element={<ProtectedRoute />}>

@@ -140,6 +140,12 @@ export default function HomePage() {
         </div>
         <div className="flex items-center gap-3">
           <button
+            onClick={() => navigate('/how-to')}
+            className="btn-ghost text-sm px-4 py-2 hidden sm:inline-flex"
+          >
+            How to use
+          </button>
+          <button
             onClick={() => navigate('/join')}
             className="btn-ghost text-sm px-4 py-2 border border-border"
           >
@@ -201,6 +207,17 @@ export default function HomePage() {
             </span>
           ))}
         </div>
+
+        {/* Guide link */}
+        <button
+          onClick={() => navigate('/how-to')}
+          className="text-dim hover:text-amber text-sm mb-10 transition-colors
+                     inline-flex items-center gap-1.5 animate-fade-in"
+          style={{ animationDelay: '0.15s' }}
+        >
+          New here? See how it works, incl. Netflix &amp; Prime setup
+          <span className="inline-block">→</span>
+        </button>
 
         {/* Create / Join a Room */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-4xl mb-10

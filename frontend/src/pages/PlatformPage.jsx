@@ -5,7 +5,12 @@ import { useAuthStore } from '@/store/authStore.js';
 import { roomApi } from '@/api/room.api.js';
 import { PLATFORMS } from './HomePage.jsx';
 
-const API_BASE  = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
+// In production VITE_API_URL is intentionally empty (nginx proxies /api and
+// /socket.io on the same origin), so fall back to the current origin — NOT
+// localhost. This SERVER_URL is handed to the extension, which opens a socket
+// at `${SERVER_URL}/socket.io`, so it must be the real public origin.
+const API_BASE  = import.meta.env.VITE_API_URL
+  || `${typeof window !== 'undefined' ? window.location.origin : ''}/api/v1`;
 const SERVER_URL = API_BASE.replace('/api/v1', '');
 
 // Platforms whose videos can be embedded via IFrame — no browser extension required
@@ -19,6 +24,11 @@ export default function PlatformPage() {
 
   const platform      = PLATFORMS.find((p) => p.id === platformId);
   const needsExtension = platform ? !EMBEDDABLE.includes(platform.id) : true;
+
+  // Mobile browsers can't run the sync extension — guide the user instead of dead-ending.
+  const isMobileDevice = typeof navigator !== 'undefined'
+    && /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+  const extensionUnavailable = needsExtension && isMobileDevice;
 
   const [step, setStep]               = useState('init');   // init|auth|ready|launching|launched|no-ext
   const [displayName, setDisplayName] = useState('');
@@ -44,6 +54,11 @@ export default function PlatformPage() {
   }, [step]);
 
   if (!platform) return null;
+
+  // Mobile + DRM platform → show the "continue on desktop" guidance screen.
+  if (extensionUnavailable) {
+    return <MobileExtensionNotice platform={platform} navigate={navigate} />;
+  }
 
   // ── Guest login ────────────────────────────────────────────
   const handleLogin = async (e) => {
@@ -335,5 +350,129 @@ function ErrorMsg({ children }) {
   return (
     <p className="text-danger text-xs bg-danger/10 border border-danger/20
                    rounded-lg px-3 py-2">{children}</p>
+  );
+}
+
+function MobileExtensionNotice({ platform, navigate }) {
+  const [copied, setCopied] = useState(false);
+  const isAndroid = /android/i.test(navigator.userAgent);
+
+  const copyDesktopLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard may be unavailable; the URL is on screen anyway */
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-void flex items-center justify-center px-4 py-8">
+      {/* Ambient glow */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                        w-[600px] h-[400px] opacity-20 blur-[120px] rounded-full"
+             style={{ background: `radial-gradient(ellipse, ${platform.glowColor} 0%, transparent 70%)` }} />
+      </div>
+
+      <div className="relative z-10 w-full max-w-sm animate-slide-up">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-dim text-xs
+                                  hover:text-sub transition-colors mb-6">
+          ← Back to home
+        </Link>
+
+        {/* Platform header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center border border-border bg-raised">
+            <span className="text-lg" style={{ color: platform.borderColor }}>▶</span>
+          </div>
+          <div>
+            <h1 className="font-display font-bold text-xl text-bright">{platform.name}</h1>
+            <p className="text-dim text-xs">Watch together in sync</p>
+          </div>
+        </div>
+
+        <div className="card p-6 space-y-5">
+          {/* Why */}
+          <div className="flex items-start gap-2.5 p-3 rounded-xl bg-amber/5 border border-amber/20">
+            <span className="text-amber text-base shrink-0 mt-0.5">📱</span>
+            <div>
+              <p className="text-amber text-xs font-semibold mb-0.5">
+                {platform.name} sync needs a desktop browser
+              </p>
+              <p className="text-dim text-xs leading-relaxed">
+                Phones and tablets can’t run the WatchParty extension, so synced
+                playback for {platform.name} only works on a computer (Chrome, Edge or Brave).
+              </p>
+            </div>
+          </div>
+
+          {/* Continue on desktop */}
+          <div>
+            <p className="text-sub text-xs font-mono uppercase tracking-widest mb-2">
+              Continue on your computer
+            </p>
+            <button onClick={copyDesktopLink} className="btn-primary w-full justify-center py-2.5">
+              {copied ? '✓ Link copied' : '🔗 Copy link for desktop'}
+            </button>
+            <p className="text-dim text-xs leading-relaxed mt-2">
+              Open the link on your computer, install the extension once, and start the party.
+            </p>
+          </div>
+
+          {/* What works on mobile */}
+          <div className="pt-1 border-t border-border">
+            <p className="text-sub text-xs font-mono uppercase tracking-widest mb-3 mt-3">
+              On your phone right now
+            </p>
+            <div className="space-y-2.5">
+              <button
+                onClick={() => navigate('/platform/youtube')}
+                className="btn-ghost w-full justify-start gap-2 py-2.5 border border-border text-sm"
+              >
+                <span>▶</span> Watch YouTube together — no extension
+              </button>
+              <button
+                onClick={() => navigate('/join')}
+                className="btn-ghost w-full justify-start gap-2 py-2.5 border border-border text-sm"
+              >
+                <span>💬</span> Join a room to chat, react &amp; talk
+              </button>
+            </div>
+          </div>
+
+          {/* Android-only: extensions ARE possible in some Chromium browsers */}
+          {isAndroid && (
+            <div className="pt-1 border-t border-border">
+              <p className="text-sub text-xs font-mono uppercase tracking-widest mb-2 mt-3">
+                Advanced · sync on Android
+              </p>
+              <p className="text-dim text-xs leading-relaxed mb-3">
+                Stock Chrome for Android can’t run extensions, but browsers like Kiwi or
+                Lemur can — the same way you’d run an ad blocker such as uBlock Origin.
+                Install one, open WatchParty in it, add the extension, and sync {platform.name}
+                right on your phone.
+              </p>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost w-full justify-start gap-2 py-2.5 border border-border text-sm"
+              >
+                <span>🧩</span> Get an extensions browser (Kiwi)
+              </a>
+            </div>
+          )}
+
+          <Link
+            to="/how-to"
+            className="block text-center text-amber text-sm hover:underline underline-offset-2"
+          >
+            See the full setup guide →
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

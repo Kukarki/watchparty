@@ -78,8 +78,11 @@ export default function LobbyPage() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Create Room */}
-          <div className="card p-8 hover:border-amber/30 transition-colors duration-300">
-            <div className="text-4xl mb-4">✨</div>
+          <div className="card group p-8 hover:border-amber/30 transition-colors duration-300">
+            <div className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center
+                            text-2xl bg-amber/10 border border-amber/20
+                            group-hover:bg-amber/15 group-hover:border-amber/30
+                            transition-colors duration-300">✨</div>
             <h2 className="font-display font-semibold text-xl text-bright mb-2">
               Create a Room
             </h2>
@@ -143,8 +146,11 @@ export default function LobbyPage() {
           </div>
 
           {/* Join Room */}
-          <div className="card p-8 hover:border-amber/30 transition-colors duration-300">
-            <div className="text-4xl mb-4">🔗</div>
+          <div className="card group p-8 hover:border-amber/30 transition-colors duration-300">
+            <div className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center
+                            text-2xl bg-amber/10 border border-amber/20
+                            group-hover:bg-amber/15 group-hover:border-amber/30
+                            transition-colors duration-300">🔗</div>
             <h2 className="font-display font-semibold text-xl text-bright mb-2">
               Join a Room
             </h2>

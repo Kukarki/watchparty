@@ -94,6 +94,7 @@ export default function HomePage() {
   const { isAuthenticated } = useAuth();
   const [imgErrors, setImgErrors] = useState({});
   const [hovered, setHovered] = useState(null);
+  const [joinCode, setJoinCode] = useState('');
 
   const handlePlatformClick = (platformId) => {
     navigate(`/platform/${platformId}`);
@@ -101,6 +102,19 @@ export default function HomePage() {
 
   const handleImgError = (id) => {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
+  const handleCreate = () => {
+    // Authenticated users go straight to their lobby; guests set a name first.
+    navigate(isAuthenticated ? '/lobby' : '/join');
+  };
+
+  const handleJoin = (e) => {
+    e.preventDefault();
+    const code = joinCode.trim().toUpperCase();
+    if (!code) return;
+    // Route through JoinPage so the guest confirms their display name.
+    navigate(`/join/${encodeURIComponent(code)}`);
   };
 
   return (
@@ -125,6 +139,12 @@ export default function HomePage() {
           </span>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/how-to')}
+            className="btn-ghost text-sm px-4 py-2 hidden sm:inline-flex"
+          >
+            How to use
+          </button>
           <button
             onClick={() => navigate('/join')}
             className="btn-ghost text-sm px-4 py-2 border border-border"
@@ -169,22 +189,116 @@ export default function HomePage() {
           Everyone's playback stays in perfect sync — automatically.
         </p>
 
-        {/* How it works */}
-        <div className="flex flex-wrap justify-center items-center gap-2 text-xs
-                         text-dim font-mono mb-12 animate-fade-in"
-             style={{ animationDelay: '0.15s' }}>
-          {['Pick a platform', 'Install extension (once)', 'Create a room', 'Invite friends', 'Watch together']
-            .map((step, i) => (
-              <span key={step} className="flex items-center gap-2">
-                <span className="text-amber font-bold">{i + 1}</span>
-                <span>{step}</span>
-                {i < 4 && <span className="text-border">→</span>}
+        {/* Feature strip */}
+        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-8
+                         animate-fade-in"
+             style={{ animationDelay: '0.12s' }}>
+          {[
+            { icon: '⚡', label: 'Frame-perfect sync' },
+            { icon: '💬', label: 'Live chat & reactions' },
+            { icon: '🎙️', label: 'Built-in voice' },
+          ].map(({ icon, label }, i) => (
+            <span key={label} className="flex items-center">
+              {i > 0 && <span className="hidden sm:inline text-border mr-6">·</span>}
+              <span className="inline-flex items-center gap-2 text-sub text-sm">
+                <span className="text-base">{icon}</span>
+                {label}
               </span>
-            ))}
+            </span>
+          ))}
+        </div>
+
+        {/* Guide link */}
+        <button
+          onClick={() => navigate('/how-to')}
+          className="text-dim hover:text-amber text-sm mb-10 transition-colors
+                     inline-flex items-center gap-1.5 animate-fade-in"
+          style={{ animationDelay: '0.15s' }}
+        >
+          New here? See how it works, incl. Netflix &amp; Prime setup
+          <span className="inline-block">→</span>
+        </button>
+
+        {/* Create / Join a Room */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-4xl mb-10
+                         animate-slide-up"
+             style={{ animationDelay: '0.18s' }}>
+          {/* Create */}
+          <div className="card group p-5 flex flex-col text-left
+                           hover:border-amber/40 hover:-translate-y-0.5
+                           transition-all duration-300">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
+                              text-lg bg-amber/10 border border-amber/20
+                              group-hover:bg-amber/15 transition-colors duration-300">
+                ✨
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-bright text-base leading-tight">
+                  Create a Room
+                </h3>
+                <p className="text-dim text-xs">Start a new watch party.</p>
+              </div>
+            </div>
+            <button
+              onClick={handleCreate}
+              className="btn-primary mt-auto self-start"
+            >
+              Create <span className="group-hover:translate-x-0.5 transition-transform inline-block">→</span>
+            </button>
+          </div>
+
+          {/* Join */}
+          <div className="card group p-5 flex flex-col text-left
+                           hover:border-amber/40 hover:-translate-y-0.5
+                           transition-all duration-300">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
+                              text-lg bg-amber/10 border border-amber/20
+                              group-hover:bg-amber/15 transition-colors duration-300">
+                🔗
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-bright text-base leading-tight">
+                  Join a Room
+                </h3>
+                <p className="text-dim text-xs">Have a code? Enter it below.</p>
+              </div>
+            </div>
+            <form onSubmit={handleJoin} className="mt-auto flex gap-2">
+              <input
+                type="text"
+                className="input-base font-mono uppercase tracking-widest flex-1"
+                placeholder="ROOM CODE"
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value)}
+                maxLength={8}
+                aria-label="Room code"
+              />
+              <button
+                type="submit"
+                disabled={!joinCode.trim()}
+                className="btn-primary shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Go
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Choose what to watch */}
+        <div className="w-full max-w-4xl mb-4 text-left animate-slide-up"
+             style={{ animationDelay: '0.2s' }}>
+          <h2 className="font-display font-bold text-xl sm:text-2xl text-bright mb-1">
+            Choose What to Watch
+          </h2>
+          <p className="text-sub text-sm">
+            Pick a platform to start a synced session.
+          </p>
         </div>
 
         {/* Platform grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full max-w-4xl mb-16
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-4xl
                          animate-slide-up"
              style={{ animationDelay: '0.2s' }}>
           {PLATFORMS.map((platform) => (
@@ -196,7 +310,7 @@ export default function HomePage() {
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && handlePlatformClick(platform.id)}
-              className="relative group p-6 text-left flex flex-col gap-4
+              className="relative group p-4 text-left flex flex-col gap-3
                            rounded-xl border cursor-pointer
                            transition-all duration-300
                            hover:-translate-y-1 active:scale-[0.98]"
@@ -247,21 +361,6 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Feature cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-4xl animate-slide-up"
-             style={{ animationDelay: '0.3s' }}>
-          {[
-            { icon: '⚡', title: 'Frame-perfect sync', desc: 'Play, pause and seek stay in lock-step for everyone in the room.' },
-            { icon: '💬', title: 'Live chat & reactions', desc: 'WhatsApp-style chat with emoji reactions that float on your screen.' },
-            { icon: '🎙️', title: 'Built-in voice', desc: 'Discord-style voice rooms so you can talk while you watch.' },
-          ].map(({ icon, title, desc }) => (
-            <div key={title} className="card p-6 text-left hover:border-amber/30 transition-colors duration-300">
-              <div className="text-2xl mb-3">{icon}</div>
-              <h3 className="font-display font-semibold text-bright text-sm mb-1.5">{title}</h3>
-              <p className="text-dim text-xs leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
       </main>
     </div>
   );

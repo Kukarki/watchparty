@@ -1,12 +1,50 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 const MAX_LENGTH = 2000;
-const EMOJI_OPTIONS = ['👍', '❤️', '😂', '🔥', '🎉', '😍', '👏', '😮', '🙂', '😄', '🤩', '🥳', '😢', '🙏', '💯', '✨', '😎', '🤔', '😡', '😅', '🥰', '🙌', '💖'];
+const RECENT_EMOJIS_KEY = 'watchparty.recentEmojis';
+const MAX_RECENT = 6;
+
+function loadRecentEmojis() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(RECENT_EMOJIS_KEY));
+    return Array.isArray(stored) ? stored.slice(0, MAX_RECENT) : [];
+  } catch {
+    return [];
+  }
+}
+const EMOJI_OPTIONS = [
+  // Gestures
+  '👍', '👎', '👏', '🙌', '🙏', '🤝',
+  // Hearts
+  '❤️', '🧡', '💛', '💚', '💙', '💜',
+  '🖤', '🤍', '💖', '💕', '💘', '💔',
+  // Happy faces
+  '😂', '🤣', '😅', '😊', '🙂', '😉',
+  '😍', '🥰', '😘', '😎', '🤩', '🥳',
+  '🤗', '🤔', '🫡', '😌', '🙃', '😴',
+  '🥹', '😇', '🤠', '🤪', '😏', '😜',
+  '🤭', '🫠', '🤨', '😐', '🤤', '🤓',
+  // Surprised / sad / angry
+  '😮', '😯', '😲', '😱', '🤯', '🥺',
+  '😢', '😭', '😤', '😠', '😡', '🤬',
+  // Hype & symbols
+  '🔥', '💯', '✨', '⭐', '🎉', '🎊',
+  '🚀', '🎬', '🍿', '👀', '💪', '🤙',
+];
 
 export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say something...' }) {
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [recentEmojis, setRecentEmojis] = useState(loadRecentEmojis);
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(RECENT_EMOJIS_KEY, JSON.stringify(recentEmojis));
+    } catch {
+      // Ignore storage failures (private mode, quota, etc.)
+    }
+  }, [recentEmojis]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -35,6 +73,7 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
 
   const insertEmoji = (emoji) => {
     setValue((prev) => `${prev}${prev ? ' ' : ''}${emoji}`);
+    setRecentEmojis((prev) => [emoji, ...prev.filter((e) => e !== emoji)].slice(0, MAX_RECENT));
     setShowEmojiPicker(false);
     requestAnimationFrame(() => {
       const ta = textareaRef.current;
@@ -103,7 +142,27 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
                 ✕
               </button>
             </div>
-            <div className="grid grid-cols-6 gap-1">
+            {recentEmojis.length > 0 && (
+              <div className="mb-2 border-b border-border pb-2">
+                <div className="mb-1 px-1 text-[10px] uppercase tracking-[0.24em] text-dim">
+                  Recent
+                </div>
+                <div className="grid grid-cols-6 gap-1">
+                  {recentEmojis.map((emoji) => (
+                    <button
+                      key={`recent-${emoji}`}
+                      type="button"
+                      onClick={() => insertEmoji(emoji)}
+                      className="h-9 w-9 rounded-xl text-lg transition hover:scale-105 hover:bg-amber/10 focus:outline-none focus:ring-1 focus:ring-amber/30"
+                      aria-label={`Insert ${emoji}`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="grid grid-cols-6 gap-1 max-h-[240px] overflow-y-auto pr-0.5">
               {EMOJI_OPTIONS.map((emoji) => (
                 <button
                   key={emoji}

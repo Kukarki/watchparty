@@ -5,6 +5,7 @@ import { SocketProvider }  from '@/contexts/SocketContext.jsx';
 import { RoomProvider }    from '@/contexts/RoomContext.jsx';
 import ProtectedRoute      from '@/components/layout/ProtectedRoute.jsx';
 import ErrorBoundary       from '@/components/layout/ErrorBoundary.jsx';
+import InstallPrompt        from '@/components/pwa/InstallPrompt.jsx';
 import HomePage            from '@/pages/HomePage.jsx';
 import JoinPage            from '@/pages/JoinPage.jsx';
 import LoginPage           from '@/pages/LoginPage.jsx';
@@ -12,6 +13,7 @@ import AuthCallbackPage    from '@/pages/AuthCallbackPage.jsx';
 import RoomPage            from '@/pages/RoomPage.jsx';
 import LobbyPage           from '@/pages/LobbyPage.jsx';
 import PlatformPage        from '@/pages/PlatformPage.jsx';
+import HowToPage           from '@/pages/HowToPage.jsx';
 
 export default function App() {
   return (
@@ -26,6 +28,7 @@ export default function App() {
           <Route path="/login"              element={<LoginPage />} />
           <Route path="/auth/callback"      element={<AuthCallbackPage />} />
           <Route path="/platform/:platformId" element={<PlatformPage />} />
+          <Route path="/how-to"             element={<HowToPage />} />
 
           {/* Protected */}
           <Route element={<ProtectedRoute />}>
@@ -42,6 +45,8 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+
+        <InstallPrompt />
 
         <Toaster
           position="top-center"

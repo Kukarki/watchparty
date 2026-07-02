@@ -1,6 +1,17 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 const MAX_LENGTH = 2000;
+const RECENT_EMOJIS_KEY = 'watchparty.recentEmojis';
+const MAX_RECENT = 6;
+
+function loadRecentEmojis() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(RECENT_EMOJIS_KEY));
+    return Array.isArray(stored) ? stored.slice(0, MAX_RECENT) : [];
+  } catch {
+    return [];
+  }
+}
 const EMOJI_OPTIONS = [
   // Gestures
   '👍', '👎', '👏', '🙌', '🙏', '🤝',
@@ -22,8 +33,16 @@ const EMOJI_OPTIONS = [
 export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say something...' }) {
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [recentEmojis, setRecentEmojis] = useState([]);
+  const [recentEmojis, setRecentEmojis] = useState(loadRecentEmojis);
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(RECENT_EMOJIS_KEY, JSON.stringify(recentEmojis));
+    } catch {
+      // Ignore storage failures (private mode, quota, etc.)
+    }
+  }, [recentEmojis]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -52,7 +71,7 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
 
   const insertEmoji = (emoji) => {
     setValue((prev) => `${prev}${prev ? ' ' : ''}${emoji}`);
-    setRecentEmojis((prev) => [emoji, ...prev.filter((e) => e !== emoji)].slice(0, 6));
+    setRecentEmojis((prev) => [emoji, ...prev.filter((e) => e !== emoji)].slice(0, MAX_RECENT));
     setShowEmojiPicker(false);
     requestAnimationFrame(() => {
       const ta = textareaRef.current;

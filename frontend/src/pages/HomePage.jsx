@@ -114,7 +114,7 @@ export default function HomePage() {
     const code = joinCode.trim().toUpperCase();
     if (!code) return;
     // Route through JoinPage so the guest confirms their display name.
-    navigate(`/join/${code}`);
+    navigate(`/join/${encodeURIComponent(code)}`);
   };
 
   return (

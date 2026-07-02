@@ -94,6 +94,7 @@ export default function HomePage() {
   const { isAuthenticated } = useAuth();
   const [imgErrors, setImgErrors] = useState({});
   const [hovered, setHovered] = useState(null);
+  const [joinCode, setJoinCode] = useState('');
 
   const handlePlatformClick = (platformId) => {
     navigate(`/platform/${platformId}`);
@@ -101,6 +102,19 @@ export default function HomePage() {
 
   const handleImgError = (id) => {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
+  const handleCreate = () => {
+    // Authenticated users go straight to their lobby; guests set a name first.
+    navigate(isAuthenticated ? '/lobby' : '/join');
+  };
+
+  const handleJoin = (e) => {
+    e.preventDefault();
+    const code = joinCode.trim().toUpperCase();
+    if (!code) return;
+    // Route through JoinPage so the guest confirms their display name.
+    navigate(`/join/${code}`);
   };
 
   return (
@@ -181,6 +195,82 @@ export default function HomePage() {
                 {i < 4 && <span className="text-border">→</span>}
               </span>
             ))}
+        </div>
+
+        {/* Create / Join a Room */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-4xl mb-16
+                         animate-slide-up"
+             style={{ animationDelay: '0.18s' }}>
+          {/* Create */}
+          <div className="card group p-6 flex flex-col text-left
+                           hover:border-amber/40 hover:-translate-y-0.5
+                           transition-all duration-300">
+            <div className="w-11 h-11 mb-4 rounded-xl flex items-center justify-center
+                            text-xl bg-amber/10 border border-amber/20
+                            group-hover:bg-amber/15 group-hover:border-amber/30
+                            transition-colors duration-300">
+              ✨
+            </div>
+            <h3 className="font-display font-semibold text-bright text-lg mb-1.5">
+              Create a Room
+            </h3>
+            <p className="text-dim text-sm leading-relaxed mb-5">
+              Start a new watch party and invite friends.
+            </p>
+            <button
+              onClick={handleCreate}
+              className="btn-primary mt-auto self-start"
+            >
+              Create <span className="group-hover:translate-x-0.5 transition-transform inline-block">→</span>
+            </button>
+          </div>
+
+          {/* Join */}
+          <div className="card group p-6 flex flex-col text-left
+                           hover:border-amber/40 hover:-translate-y-0.5
+                           transition-all duration-300">
+            <div className="w-11 h-11 mb-4 rounded-xl flex items-center justify-center
+                            text-xl bg-amber/10 border border-amber/20
+                            group-hover:bg-amber/15 group-hover:border-amber/30
+                            transition-colors duration-300">
+              🔗
+            </div>
+            <h3 className="font-display font-semibold text-bright text-lg mb-1.5">
+              Join a Room
+            </h3>
+            <p className="text-dim text-sm leading-relaxed mb-5">
+              Have a code? Enter it to join.
+            </p>
+            <form onSubmit={handleJoin} className="mt-auto flex gap-2">
+              <input
+                type="text"
+                className="input-base font-mono uppercase tracking-widest flex-1"
+                placeholder="ROOM CODE"
+                value={joinCode}
+                onChange={(e) => setJoinCode(e.target.value)}
+                maxLength={8}
+                aria-label="Room code"
+              />
+              <button
+                type="submit"
+                disabled={!joinCode.trim()}
+                className="btn-primary shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Go
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Choose what to watch */}
+        <div className="w-full max-w-4xl mb-6 text-left animate-slide-up"
+             style={{ animationDelay: '0.2s' }}>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-bright mb-1.5">
+            Choose What to Watch
+          </h2>
+          <p className="text-sub text-sm">
+            Pick a platform to start a synced session.
+          </p>
         </div>
 
         {/* Platform grid */}

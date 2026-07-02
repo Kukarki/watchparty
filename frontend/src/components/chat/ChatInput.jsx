@@ -22,6 +22,7 @@ const EMOJI_OPTIONS = [
 export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say something...' }) {
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [recentEmojis, setRecentEmojis] = useState([]);
   const textareaRef = useRef(null);
 
   const handleChange = (e) => {
@@ -51,6 +52,7 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
 
   const insertEmoji = (emoji) => {
     setValue((prev) => `${prev}${prev ? ' ' : ''}${emoji}`);
+    setRecentEmojis((prev) => [emoji, ...prev.filter((e) => e !== emoji)].slice(0, 6));
     setShowEmojiPicker(false);
     requestAnimationFrame(() => {
       const ta = textareaRef.current;
@@ -119,6 +121,26 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
                 ✕
               </button>
             </div>
+            {recentEmojis.length > 0 && (
+              <div className="mb-2 border-b border-border pb-2">
+                <div className="mb-1 px-1 text-[10px] uppercase tracking-[0.24em] text-dim">
+                  Recent
+                </div>
+                <div className="grid grid-cols-6 gap-1">
+                  {recentEmojis.map((emoji) => (
+                    <button
+                      key={`recent-${emoji}`}
+                      type="button"
+                      onClick={() => insertEmoji(emoji)}
+                      className="h-9 w-9 rounded-xl text-lg transition hover:scale-105 hover:bg-amber/10 focus:outline-none focus:ring-1 focus:ring-amber/30"
+                      aria-label={`Insert ${emoji}`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-6 gap-1 max-h-[240px] overflow-y-auto pr-0.5">
               {EMOJI_OPTIONS.map((emoji) => (
                 <button

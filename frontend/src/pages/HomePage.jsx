@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext.jsx';
+import LivingRoomDemo from '@/components/home/LivingRoomDemo.jsx';
 
 export const PLATFORMS = [
   {
@@ -163,61 +164,58 @@ export default function HomePage() {
       <main className="relative z-10 flex-1 flex flex-col items-center px-6 pt-10 pb-24
                         max-w-7xl mx-auto w-full">
 
-        {/* Live badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
-                         bg-amber/10 border border-amber/20 text-amber text-xs font-mono
-                         mb-8 animate-fade-in">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
-          LIVE · Real-time sync across all devices
-        </div>
+        {/* Hero: pitch on the left, live "peek inside a party" on the right */}
+        <section className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center
+                            w-full max-w-5xl mb-16 lg:mb-20">
+          {/* Left — the pitch */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+            {/* Live badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+                             bg-amber/10 border border-amber/20 text-amber text-xs font-mono
+                             mb-6 animate-fade-in">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
+              LIVE · Real-time sync across all devices
+            </div>
 
-        {/* Headline */}
-        <h1 className="font-display font-extrabold text-center
-                        text-5xl sm:text-6xl md:text-7xl
-                        text-bright leading-[0.95] tracking-tight mb-5
-                        animate-slide-up max-w-4xl"
-            style={{ animationDelay: '0.05s' }}>
-          Watch together.
-          <br />
-          <span className="text-gradient">Feel together.</span>
-        </h1>
+            {/* Headline */}
+            <h1 className="font-display font-extrabold
+                            text-5xl sm:text-6xl md:text-7xl
+                            text-bright leading-[0.95] tracking-tight mb-5
+                            animate-slide-up"
+                style={{ animationDelay: '0.05s' }}>
+              Watch together.
+              <br />
+              <span className="text-gradient">Feel together.</span>
+            </h1>
 
-        <p className="text-sub text-center text-lg sm:text-xl max-w-2xl leading-relaxed mb-5
-                       animate-slide-up"
-           style={{ animationDelay: '0.1s' }}>
-          Pick your streaming service, create a room, and invite friends.
-          Everyone's playback stays in perfect sync — automatically.
-        </p>
+            <p className="text-sub text-lg sm:text-xl max-w-xl leading-relaxed mb-7
+                           animate-slide-up"
+               style={{ animationDelay: '0.1s' }}>
+              Pick your streaming service, create a room, and invite friends.
+              Everyone's playback stays in perfect sync — automatically.
+            </p>
 
-        {/* Feature strip */}
-        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-8
-                         animate-fade-in"
-             style={{ animationDelay: '0.12s' }}>
-          {[
-            { icon: '⚡', label: 'Frame-perfect sync' },
-            { icon: '💬', label: 'Live chat & reactions' },
-            { icon: '🎙️', label: 'Built-in voice' },
-          ].map(({ icon, label }, i) => (
-            <span key={label} className="flex items-center">
-              {i > 0 && <span className="hidden sm:inline text-border mr-6">·</span>}
-              <span className="inline-flex items-center gap-2 text-sub text-sm">
-                <span className="text-base">{icon}</span>
-                {label}
-              </span>
-            </span>
-          ))}
-        </div>
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3
+                             animate-slide-up" style={{ animationDelay: '0.15s' }}>
+              <button onClick={handleCreate} className="btn-primary px-5 py-2.5">
+                Create a room
+                <span className="ml-1 group-hover:translate-x-0.5 transition-transform inline-block">→</span>
+              </button>
+              <button
+                onClick={() => navigate('/how-to')}
+                className="btn-ghost px-4 py-2.5 border border-border"
+              >
+                See how it works
+              </button>
+            </div>
+          </div>
 
-        {/* Guide link */}
-        <button
-          onClick={() => navigate('/how-to')}
-          className="text-dim hover:text-amber text-sm mb-10 transition-colors
-                     inline-flex items-center gap-1.5 animate-fade-in"
-          style={{ animationDelay: '0.15s' }}
-        >
-          New here? See how it works, incl. Netflix &amp; Prime setup
-          <span className="inline-block">→</span>
-        </button>
+          {/* Right — the living demo */}
+          <div className="animate-slide-up lg:animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <LivingRoomDemo />
+          </div>
+        </section>
 
         {/* Create / Join a Room */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-4xl mb-10

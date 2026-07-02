@@ -165,8 +165,8 @@ export default function HomePage() {
                         max-w-7xl mx-auto w-full">
 
         {/* Hero: pitch on the left, live "peek inside a party" on the right */}
-        <section className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center
-                            w-full max-w-5xl mb-16 lg:mb-20">
+        <section className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center
+                            w-full max-w-5xl mb-10 lg:mb-16">
           {/* Left — the pitch */}
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             {/* Live badge */}
@@ -188,11 +188,11 @@ export default function HomePage() {
               <span className="text-gradient">Feel together.</span>
             </h1>
 
-            <p className="text-sub text-lg sm:text-xl max-w-xl leading-relaxed mb-7
+            <p className="text-sub text-base sm:text-xl max-w-md lg:max-w-xl leading-relaxed mb-6
                            animate-slide-up"
                style={{ animationDelay: '0.1s' }}>
-              Pick your streaming service, create a room, and invite friends.
-              Everyone's playback stays in perfect sync — automatically.
+              Create a room, invite your friends, and hit play — everyone stays
+              in perfect sync, automatically.
             </p>
 
             {/* CTAs */}
@@ -217,71 +217,34 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Create / Join a Room */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-4xl mb-10
-                         animate-slide-up"
-             style={{ animationDelay: '0.18s' }}>
-          {/* Create */}
-          <div className="card group p-5 flex flex-col text-left
-                           hover:border-amber/40 hover:-translate-y-0.5
-                           transition-all duration-300">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
-                              text-lg bg-amber/10 border border-amber/20
-                              group-hover:bg-amber/15 transition-colors duration-300">
-                ✨
-              </div>
-              <div>
-                <h3 className="font-display font-semibold text-bright text-base leading-tight">
-                  Create a Room
-                </h3>
-                <p className="text-dim text-xs">Start a new watch party.</p>
-              </div>
-            </div>
+        {/* Join with a code — Create lives in the hero CTA */}
+        <div className="w-full max-w-md mb-10 animate-slide-up"
+             style={{ animationDelay: '0.22s' }}>
+          <p className="text-dim text-xs mb-2 text-center sm:text-left">
+            Got invited? Join with a room code
+          </p>
+          <form onSubmit={handleJoin}
+                className="card flex items-center gap-2 p-2 pl-4
+                           focus-within:border-amber/40 transition-colors">
+            <span className="text-dim text-lg shrink-0">🔗</span>
+            <input
+              type="text"
+              className="flex-1 min-w-0 bg-transparent outline-none text-bright placeholder:text-dim
+                         font-mono uppercase tracking-widest text-sm"
+              placeholder="ROOM CODE"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
+              maxLength={8}
+              aria-label="Room code"
+            />
             <button
-              onClick={handleCreate}
-              className="btn-primary mt-auto self-start"
+              type="submit"
+              disabled={!joinCode.trim()}
+              className="btn-primary shrink-0 px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Create <span className="group-hover:translate-x-0.5 transition-transform inline-block">→</span>
+              Join
             </button>
-          </div>
-
-          {/* Join */}
-          <div className="card group p-5 flex flex-col text-left
-                           hover:border-amber/40 hover:-translate-y-0.5
-                           transition-all duration-300">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
-                              text-lg bg-amber/10 border border-amber/20
-                              group-hover:bg-amber/15 transition-colors duration-300">
-                🔗
-              </div>
-              <div>
-                <h3 className="font-display font-semibold text-bright text-base leading-tight">
-                  Join a Room
-                </h3>
-                <p className="text-dim text-xs">Have a code? Enter it below.</p>
-              </div>
-            </div>
-            <form onSubmit={handleJoin} className="mt-auto flex gap-2">
-              <input
-                type="text"
-                className="input-base font-mono uppercase tracking-widest flex-1"
-                placeholder="ROOM CODE"
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value)}
-                maxLength={8}
-                aria-label="Room code"
-              />
-              <button
-                type="submit"
-                disabled={!joinCode.trim()}
-                className="btn-primary shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Go
-              </button>
-            </form>
-          </div>
+          </form>
         </div>
 
         {/* Choose what to watch */}

@@ -1,7 +1,23 @@
 import { useState, useRef, useCallback } from 'react';
 
 const MAX_LENGTH = 2000;
-const EMOJI_OPTIONS = ['👍', '❤️', '😂', '🔥', '🎉', '😍', '👏', '😮', '🙂', '😄', '🤩', '🥳', '😢', '🙏', '💯', '✨', '😎', '🤔', '😡', '😅', '🥰', '🙌', '💖'];
+const EMOJI_OPTIONS = [
+  // Gestures
+  '👍', '👎', '👏', '🙌', '🙏', '🤝',
+  // Hearts
+  '❤️', '🧡', '💛', '💚', '💙', '💜',
+  '🖤', '🤍', '💖', '💕', '💘', '💔',
+  // Happy faces
+  '😂', '🤣', '😅', '😊', '🙂', '😉',
+  '😍', '🥰', '😘', '😎', '🤩', '🥳',
+  '🤗', '🤔', '🫡', '😌', '🙃', '😴',
+  // Surprised / sad / angry
+  '😮', '😯', '😲', '😱', '🤯', '🥺',
+  '😢', '😭', '😤', '😠', '😡', '🤬',
+  // Hype & symbols
+  '🔥', '💯', '✨', '⭐', '🎉', '🎊',
+  '🚀', '🎬', '🍿', '👀', '💪', '🤙',
+];
 
 export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say something...' }) {
   const [value, setValue] = useState('');
@@ -103,7 +119,7 @@ export default function ChatInput({ onSubmit, onTyping, placeholder = 'Say somet
                 ✕
               </button>
             </div>
-            <div className="grid grid-cols-6 gap-1">
+            <div className="grid grid-cols-6 gap-1 max-h-[240px] overflow-y-auto pr-0.5">
               {EMOJI_OPTIONS.map((emoji) => (
                 <button
                   key={emoji}

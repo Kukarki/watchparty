@@ -21,6 +21,10 @@ self.addEventListener('fetch', (event) => {
   // Only handle GET navigations/assets on our own origin; never touch API/socket calls.
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
 
+  // Never intercept API or realtime traffic — let those hit the network directly.
+  const { pathname } = new URL(request.url);
+  if (pathname.startsWith('/api') || pathname.startsWith('/socket.io')) return;
+
   // Network-first for navigations so users always get the latest app; fall back to cached shell offline.
   if (request.mode === 'navigate') {
     event.respondWith(

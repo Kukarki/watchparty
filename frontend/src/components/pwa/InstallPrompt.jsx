@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const DISMISS_KEY = 'watchparty.installDismissed';
 
@@ -22,6 +23,10 @@ export default function InstallPrompt() {
   const [deferred, setDeferred] = useState(null);
   const [visible, setVisible] = useState(false);
   const [iosHint, setIosHint] = useState(false);
+  const { pathname } = useLocation();
+
+  // Don't cover the chat composer inside a room.
+  const suppressed = pathname.startsWith('/room/');
 
   useEffect(() => {
     if (isStandalone()) return;                       // already installed
@@ -49,7 +54,7 @@ export default function InstallPrompt() {
     };
   }, []);
 
-  if (!visible) return null;
+  if (!visible || suppressed) return null;
 
   const dismiss = () => {
     localStorage.setItem(DISMISS_KEY, '1');

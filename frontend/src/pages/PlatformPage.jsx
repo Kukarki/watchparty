@@ -5,7 +5,12 @@ import { useAuthStore } from '@/store/authStore.js';
 import { roomApi } from '@/api/room.api.js';
 import { PLATFORMS } from './HomePage.jsx';
 
-const API_BASE  = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
+// In production VITE_API_URL is intentionally empty (nginx proxies /api and
+// /socket.io on the same origin), so fall back to the current origin — NOT
+// localhost. This SERVER_URL is handed to the extension, which opens a socket
+// at `${SERVER_URL}/socket.io`, so it must be the real public origin.
+const API_BASE  = import.meta.env.VITE_API_URL
+  || `${typeof window !== 'undefined' ? window.location.origin : ''}/api/v1`;
 const SERVER_URL = API_BASE.replace('/api/v1', '');
 
 // Platforms whose videos can be embedded via IFrame — no browser extension required

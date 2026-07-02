@@ -220,7 +220,24 @@ export default function HowToPage() {
               </li>
               <li className="flex gap-2">
                 <span className="text-amber">•</span>
-                <span><span className="text-bright">Android power users</span> — browsers like Kiwi support Chrome extensions, so you can load the WatchParty extension there.</span>
+                <span>
+                  <span className="text-bright">Android — full sync is possible</span>. Stock Chrome for
+                  Android can’t run extensions, but Chromium browsers like{' '}
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-amber hover:underline underline-offset-2"
+                  >
+                    Kiwi
+                  </a>{' '}
+                  can. Install one, open WatchParty in it, add the extension, and sync Netflix
+                  or Prime right on your phone.
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-amber">•</span>
+                <span><span className="text-bright">iPhone / iPad</span> — no browser supports the sync extension, so use YouTube or join to chat, or continue on a computer.</span>
               </li>
             </ul>
             <a

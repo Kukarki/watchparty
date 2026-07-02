@@ -350,6 +350,7 @@ function ErrorMsg({ children }) {
 
 function MobileExtensionNotice({ platform, navigate }) {
   const [copied, setCopied] = useState(false);
+  const isAndroid = /android/i.test(navigator.userAgent);
 
   const copyDesktopLink = async () => {
     try {
@@ -435,6 +436,28 @@ function MobileExtensionNotice({ platform, navigate }) {
               </button>
             </div>
           </div>
+
+          {/* Android-only: extensions ARE possible in some Chromium browsers */}
+          {isAndroid && (
+            <div className="pt-1 border-t border-border">
+              <p className="text-sub text-xs font-mono uppercase tracking-widest mb-2 mt-3">
+                Advanced · sync on Android
+              </p>
+              <p className="text-dim text-xs leading-relaxed mb-3">
+                Chrome for Android can’t run extensions, but some Chromium browsers can
+                (like Kiwi). Install one, open WatchParty in it, then add the extension to
+                sync {platform.name} right on your phone.
+              </p>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost w-full justify-start gap-2 py-2.5 border border-border text-sm"
+              >
+                <span>🧩</span> Get an extensions browser (Kiwi)
+              </a>
+            </div>
+          )}
 
           <Link
             to="/how-to"

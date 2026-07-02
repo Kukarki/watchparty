@@ -5,6 +5,7 @@ import { SocketProvider }  from '@/contexts/SocketContext.jsx';
 import { RoomProvider }    from '@/contexts/RoomContext.jsx';
 import ProtectedRoute      from '@/components/layout/ProtectedRoute.jsx';
 import ErrorBoundary       from '@/components/layout/ErrorBoundary.jsx';
+import InstallPrompt        from '@/components/pwa/InstallPrompt.jsx';
 import HomePage            from '@/pages/HomePage.jsx';
 import JoinPage            from '@/pages/JoinPage.jsx';
 import LoginPage           from '@/pages/LoginPage.jsx';
@@ -44,6 +45,8 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+
+        <InstallPrompt />
 
         <Toaster
           position="top-center"

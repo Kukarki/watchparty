@@ -202,40 +202,27 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* How it works */}
-        <div className="flex flex-wrap justify-center items-center gap-2 text-xs
-                         text-dim font-mono mb-12 animate-fade-in"
-             style={{ animationDelay: '0.15s' }}>
-          {['Pick a platform', 'Install extension (once)', 'Create a room', 'Invite friends', 'Watch together']
-            .map((step, i) => (
-              <span key={step} className="flex items-center gap-2">
-                <span className="text-amber font-bold">{i + 1}</span>
-                <span>{step}</span>
-                {i < 4 && <span className="text-border">→</span>}
-              </span>
-            ))}
-        </div>
-
         {/* Create / Join a Room */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-4xl mb-16
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-4xl mb-10
                          animate-slide-up"
              style={{ animationDelay: '0.18s' }}>
           {/* Create */}
-          <div className="card group p-6 flex flex-col text-left
+          <div className="card group p-5 flex flex-col text-left
                            hover:border-amber/40 hover:-translate-y-0.5
                            transition-all duration-300">
-            <div className="w-11 h-11 mb-4 rounded-xl flex items-center justify-center
-                            text-xl bg-amber/10 border border-amber/20
-                            group-hover:bg-amber/15 group-hover:border-amber/30
-                            transition-colors duration-300">
-              ✨
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
+                              text-lg bg-amber/10 border border-amber/20
+                              group-hover:bg-amber/15 transition-colors duration-300">
+                ✨
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-bright text-base leading-tight">
+                  Create a Room
+                </h3>
+                <p className="text-dim text-xs">Start a new watch party.</p>
+              </div>
             </div>
-            <h3 className="font-display font-semibold text-bright text-lg mb-1.5">
-              Create a Room
-            </h3>
-            <p className="text-dim text-sm leading-relaxed mb-5">
-              Start a new watch party and invite friends.
-            </p>
             <button
               onClick={handleCreate}
               className="btn-primary mt-auto self-start"
@@ -245,21 +232,22 @@ export default function HomePage() {
           </div>
 
           {/* Join */}
-          <div className="card group p-6 flex flex-col text-left
+          <div className="card group p-5 flex flex-col text-left
                            hover:border-amber/40 hover:-translate-y-0.5
                            transition-all duration-300">
-            <div className="w-11 h-11 mb-4 rounded-xl flex items-center justify-center
-                            text-xl bg-amber/10 border border-amber/20
-                            group-hover:bg-amber/15 group-hover:border-amber/30
-                            transition-colors duration-300">
-              🔗
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 shrink-0 rounded-lg flex items-center justify-center
+                              text-lg bg-amber/10 border border-amber/20
+                              group-hover:bg-amber/15 transition-colors duration-300">
+                🔗
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-bright text-base leading-tight">
+                  Join a Room
+                </h3>
+                <p className="text-dim text-xs">Have a code? Enter it below.</p>
+              </div>
             </div>
-            <h3 className="font-display font-semibold text-bright text-lg mb-1.5">
-              Join a Room
-            </h3>
-            <p className="text-dim text-sm leading-relaxed mb-5">
-              Have a code? Enter it to join.
-            </p>
             <form onSubmit={handleJoin} className="mt-auto flex gap-2">
               <input
                 type="text"
@@ -282,9 +270,9 @@ export default function HomePage() {
         </div>
 
         {/* Choose what to watch */}
-        <div className="w-full max-w-4xl mb-6 text-left animate-slide-up"
+        <div className="w-full max-w-4xl mb-4 text-left animate-slide-up"
              style={{ animationDelay: '0.2s' }}>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-bright mb-1.5">
+          <h2 className="font-display font-bold text-xl sm:text-2xl text-bright mb-1">
             Choose What to Watch
           </h2>
           <p className="text-sub text-sm">
@@ -293,7 +281,7 @@ export default function HomePage() {
         </div>
 
         {/* Platform grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full max-w-4xl mb-16
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-4xl
                          animate-slide-up"
              style={{ animationDelay: '0.2s' }}>
           {PLATFORMS.map((platform) => (
@@ -305,7 +293,7 @@ export default function HomePage() {
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && handlePlatformClick(platform.id)}
-              className="relative group p-6 text-left flex flex-col gap-4
+              className="relative group p-4 text-left flex flex-col gap-3
                            rounded-xl border cursor-pointer
                            transition-all duration-300
                            hover:-translate-y-1 active:scale-[0.98]"

@@ -183,6 +183,25 @@ export default function HomePage() {
           Everyone's playback stays in perfect sync — automatically.
         </p>
 
+        {/* Feature strip */}
+        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 mb-8
+                         animate-fade-in"
+             style={{ animationDelay: '0.12s' }}>
+          {[
+            { icon: '⚡', label: 'Frame-perfect sync' },
+            { icon: '💬', label: 'Live chat & reactions' },
+            { icon: '🎙️', label: 'Built-in voice' },
+          ].map(({ icon, label }, i) => (
+            <span key={label} className="flex items-center">
+              {i > 0 && <span className="hidden sm:inline text-border mr-6">·</span>}
+              <span className="inline-flex items-center gap-2 text-sub text-sm">
+                <span className="text-base">{icon}</span>
+                {label}
+              </span>
+            </span>
+          ))}
+        </div>
+
         {/* How it works */}
         <div className="flex flex-wrap justify-center items-center gap-2 text-xs
                          text-dim font-mono mb-12 animate-fade-in"
@@ -337,32 +356,6 @@ export default function HomePage() {
           ))}
         </div>
 
-        {/* Feature cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-4xl animate-slide-up"
-             style={{ animationDelay: '0.3s' }}>
-          {[
-            { icon: '⚡', title: 'Frame-perfect sync', desc: 'Play, pause and seek stay in lock-step for everyone in the room.' },
-            { icon: '💬', title: 'Live chat & reactions', desc: 'WhatsApp-style chat with emoji reactions that float on your screen.' },
-            { icon: '🎙️', title: 'Built-in voice', desc: 'Discord-style voice rooms so you can talk while you watch.' },
-          ].map(({ icon, title, desc }) => (
-            <div key={title}
-                 className="card group flex items-start gap-4 p-5
-                            sm:flex-col sm:items-start sm:gap-0
-                            text-left hover:border-amber/30 hover:-translate-y-0.5
-                            transition-all duration-300">
-              <div className="shrink-0 w-11 h-11 sm:mb-4 rounded-xl flex items-center justify-center
-                              text-xl bg-amber/10 border border-amber/20
-                              group-hover:bg-amber/15 group-hover:border-amber/30
-                              transition-colors duration-300">
-                {icon}
-              </div>
-              <div className="min-w-0">
-                <h3 className="font-display font-semibold text-bright text-sm mb-1">{title}</h3>
-                <p className="text-dim text-xs leading-relaxed">{desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </main>
     </div>
   );

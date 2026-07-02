@@ -231,7 +231,8 @@ export default function HowToPage() {
                   >
                     Kiwi
                   </a>{' '}
-                  can. Install one, open WatchParty in it, add the extension, and sync Netflix
+                  can — it’s the same way ad blockers like uBlock Origin run on Android.
+                  Install one, open WatchParty in it, add the extension, and sync Netflix
                   or Prime right on your phone.
                 </span>
               </li>

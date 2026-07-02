@@ -444,9 +444,10 @@ function MobileExtensionNotice({ platform, navigate }) {
                 Advanced · sync on Android
               </p>
               <p className="text-dim text-xs leading-relaxed mb-3">
-                Chrome for Android can’t run extensions, but some Chromium browsers can
-                (like Kiwi). Install one, open WatchParty in it, then add the extension to
-                sync {platform.name} right on your phone.
+                Stock Chrome for Android can’t run extensions, but browsers like Kiwi or
+                Lemur can — the same way you’d run an ad blocker such as uBlock Origin.
+                Install one, open WatchParty in it, add the extension, and sync {platform.name}
+                right on your phone.
               </p>
               <a
                 href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"

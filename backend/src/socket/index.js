@@ -5,6 +5,7 @@ import { userSocketMap } from './userMap.js';
 import { registerRoomHandlers } from './room.socket.js';
 import { registerVoiceHandlers } from './voice.socket.js';
 import { registerCallHandlers } from './callHandler.js';
+import { registerFriendHandlers } from './friends.socket.js';
 import { logger } from '../utils/logger.js';
 
 export function initSocketServer(httpServer) {
@@ -64,6 +65,7 @@ export function initSocketServer(httpServer) {
     registerRoomHandlers(io, socket);
     registerVoiceHandlers(io, socket);
     registerCallHandlers(io, socket);
+    registerFriendHandlers(io, socket);
 
     socket.on('ping', () => socket.emit('pong'));
 

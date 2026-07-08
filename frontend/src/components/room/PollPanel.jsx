@@ -89,7 +89,7 @@ export default function PollPanel({ roomId }) {
       await pollApi.end(roomId, poll.id);
       setPoll((p) => p ? { ...p, is_active: false } : p);
       toast.success('Poll ended');
-    } catch {}
+    } catch (err) { console.error(err); }
   };
 
   const addOption = () => {

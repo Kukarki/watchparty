@@ -135,11 +135,13 @@ export default function ChatMessage({ message, isSelf, isGrouped, onReact, curre
             {/* Message bubble */}
             <div
               ref={bubbleRef}
+              title={timeLabel}
               onContextMenu={(e) => { e.preventDefault(); openPicker(bubbleRef.current); }}
-              className={`rounded-2xl px-3 py-2 text-sm shadow-sm select-none
+              className={`px-3.5 py-2 text-sm leading-relaxed shadow-sm select-none
+                           break-words transition-colors
                            ${isSelf
-                             ? 'bg-amber text-void rounded-br-md'
-                             : 'bg-raised text-bright border border-border rounded-bl-md'
+                             ? 'bg-amber text-void font-medium rounded-2xl rounded-br-sm'
+                             : 'bg-raised text-bright border border-border rounded-2xl rounded-bl-sm'
                            }`}
             >
               {message.content}

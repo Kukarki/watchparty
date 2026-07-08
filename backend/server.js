@@ -16,9 +16,14 @@ import apiRoutes                  from './src/routes/index.js';
 async function bootstrap() {
   // 1. Supabase — required (all state lives here now)
   const ok = await testSupabaseConnection();
+  const isDev = process.env.NODE_ENV !== 'production';
   if (!ok) {
-    logger.error('Supabase is required but could not connect. Check your .env credentials.');
-    process.exit(1);
+    if (isDev) {
+      logger.warn('Supabase not connected — running in DEV mode with in-memory storage.');
+    } else {
+      logger.error('Supabase is required in production but could not connect. Check your .env credentials.');
+      process.exit(1);
+    }
   }
 
   // 2. Express

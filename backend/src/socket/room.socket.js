@@ -174,6 +174,14 @@ export function registerRoomHandlers(io, socket) {
     }
   });
 
+  // ─── reaction:float (ephemeral floating emojis, seen by everyone) ─────────
+  socket.on('reaction:float', ({ roomId, emoji } = {}) => {
+    if (!_inRoom(socket, roomId)) return;
+    if (typeof emoji !== 'string' || emoji.length > 12) return;
+    if (!chatRateOk(socket)) return;   // reuse chat rate limit to prevent spam
+    io.to(roomId).emit('reaction:float', { emoji, userId, displayName });
+  });
+
   // ─── chat:reaction ───────────────────────────────────────────────────────
   socket.on('chat:reaction', async ({ roomId, messageId, emoji } = {}) => {
     if (!_inRoom(socket, roomId) || !messageId || !emoji) return;

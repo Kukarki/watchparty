@@ -15,4 +15,15 @@ module.exports = {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
   },
+  overrides: [
+    {
+      // React Three Fiber's JSX elements (<mesh>, <meshStandardMaterial>,
+      // etc.) accept three.js props (position, args, roughness, ...) that
+      // aren't standard DOM/React attributes -- react/no-unknown-property
+      // doesn't know about R3F's element namespace, so it flags every one
+      // of them as a false positive. Scoped to just the R3F component tree.
+      files: ['src/games/ludo3d/components/**/*.jsx'],
+      rules: { 'react/no-unknown-property': 'off' },
+    },
+  ],
 };
